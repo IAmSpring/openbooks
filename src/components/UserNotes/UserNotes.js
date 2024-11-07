@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import React, { useState, useCallback, useEffect, useMemo } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { addNote } from '../../store/userNotesSlice';
 import { toast } from 'react-toastify';
 import { saveToCache } from '../../data/uploadsCache';
+import { createSelector } from '@reduxjs/toolkit';
 
 const ALLOWED_FILE_TYPES = {
     'image/jpeg': 'Image',
@@ -15,11 +16,23 @@ const ALLOWED_FILE_TYPES = {
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
 
+const selectUserNotes = createSelector(
+    [(state) => state.userNotes, (_, userId) => userId],
+    (userNotes, userId) => userNotes[userId] || []
+);
+
 const UserNotes = ({ userId }) => {
     const [note, setNote] = useState('');
     const [files, setFiles] = useState([]);
     const [previews, setPreviews] = useState([]);
     const dispatch = useDispatch();
+
+    const currentNotes = useSelector(state => selectUserNotes(state, userId));
+
+    // Debug effect
+    useEffect(() => {
+        console.log('Notes updated for userId:', userId, currentNotes);
+    }, [currentNotes, userId]);
 
     const generateFileReference = (file) => {
         const timestamp = new Date().getTime();
@@ -71,7 +84,7 @@ const UserNotes = ({ userId }) => {
         setPreviews(previews.filter((_, i) => i !== index));
     };
 
-    const handleAddNote = () => {
+    const handleAddNote = useCallback(() => {
         if (!note.trim() && !files.length) {
             toast.error('Please add a note or attach files');
             return;
@@ -87,18 +100,17 @@ const UserNotes = ({ userId }) => {
             timestamp: new Date().toISOString()
         };
 
-        console.log('Dispatching note:', noteData); // Debug log
-
+        // Dispatch to Redux store
         dispatch(addNote({
             userId,
             note: noteData
         }));
 
+        // Clear form
         setNote('');
         setFiles([]);
-        setPreviews([]);
         toast.success('Note added successfully');
-    };
+    }, [note, files, userId, dispatch]);
 
     return (
         <div className="mt-4 space-y-4">
@@ -177,4 +189,4 @@ const UserNotes = ({ userId }) => {
     );
 };
 
-export default UserNotes; 
+export default React.memo(UserNotes); 

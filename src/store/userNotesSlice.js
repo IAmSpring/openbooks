@@ -8,10 +8,12 @@ const userNotesSlice = createSlice({
   reducers: {
     addNote: (state, action) => {
       const { userId, note } = action.payload;
+      
       if (!state[userId]) {
         state[userId] = [];
       }
-      state[userId].push(note);
+      
+      state[userId] = [...state[userId], { ...note }];
       console.log('Updated notes state:', state[userId]);
     },
   },

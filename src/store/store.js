@@ -2,7 +2,7 @@ import { configureStore } from '@reduxjs/toolkit';
 import spreadsheetReducer from './spreadsheetSlice';
 import userNotesReducer from './userNotesSlice';
 
-// Load persisted notes
+// Load persisted notes on startup
 const loadPersistedNotes = () => {
     try {
         const persistedNotes = localStorage.getItem('userNotes');
@@ -13,7 +13,7 @@ const loadPersistedNotes = () => {
     }
 };
 
-export const store = configureStore({
+const store = configureStore({
     reducer: {
         spreadsheet: spreadsheetReducer,
         userNotes: userNotesReducer
@@ -31,8 +31,14 @@ export const store = configureStore({
         }),
 });
 
-// Subscribe to store changes to persist notes
+// Save to localStorage when store changes
+let timeoutId;
 store.subscribe(() => {
-    const state = store.getState();
-    localStorage.setItem('userNotes', JSON.stringify(state.userNotes));
+    if (timeoutId) clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => {
+        const state = store.getState();
+        localStorage.setItem('userNotes', JSON.stringify(state.userNotes));
+    }, 1000);
 });
+
+export { store };

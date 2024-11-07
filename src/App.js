@@ -12,6 +12,7 @@ import SplashScreen from './components/SplashScreen/SplashScreen';
 import data from './components/SpreadsheetTable/dummyData.json';
 import CookieConsent from './components/CookieConsent/CookieConsent';
 import Sparkle from './components/Sparkle/Sparkle';
+import AIChatInterface from './components/AIChat/AIChatInterface';
 
 function App() {
     const [filters, setFilters] = useState({
@@ -304,6 +305,27 @@ function App() {
                                         Reset Filters
                                     </NavButton>
                                     <NavButton
+                                        onClick={() => {}}
+                                        disabled={true}
+                                        className="p-2 bg-purple-500 text-white rounded hover:bg-purple-600 disabled:opacity-50 whitespace-nowrap flex items-center gap-2"
+                                    >
+                                        <svg 
+                                            className="w-4 h-4" 
+                                            fill="none" 
+                                            stroke="currentColor" 
+                                            viewBox="0 0 24 24"
+                                        >
+                                            <path 
+                                                strokeLinecap="round" 
+                                                strokeLinejoin="round" 
+                                                strokeWidth={2} 
+                                                d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"
+                                            />
+                                        </svg>
+                                        Upload from Source
+                                        <span className="text-xs opacity-75">(Coming Soon)</span>
+                                    </NavButton>
+                                    <NavButton
                                         onClick={handleSQLSchemaClick}
                                         className="p-2 bg-blue-500 text-white rounded hover:bg-blue-600 whitespace-nowrap"
                                     >
@@ -343,6 +365,7 @@ function App() {
             </main>
             <Footer />
             <CookieConsent />
+            <AIChatInterface />
         </div>
     );
 }

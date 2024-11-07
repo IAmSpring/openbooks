@@ -1,5 +1,5 @@
 // src/SpreadsheetTable.js
-import React, { memo, useState, useEffect } from 'react';
+import React, { memo, useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { motion } from 'framer-motion';
 
@@ -25,10 +25,26 @@ const SpreadsheetTable = memo(({ data, onFiltersChange, onTotalCountChange, onUs
     const [selectedColors, setSelectedColors] = useState(uniqueValues(4));
     const [selectedPets, setSelectedPets] = useState(uniqueValues(5));
 
-    useEffect(() => {
-        const newFilters = { selectedOccupations, ageFilter, nameFilter, emailFilter, sortConfig, caseSensitive, selectedHobbies, selectedColors, selectedPets, selectedStatus };
+    const handleFilterChange = useCallback(() => {
+        const newFilters = {
+            selectedOccupations,
+            ageFilter,
+            nameFilter,
+            emailFilter,
+            sortConfig,
+            caseSensitive,
+            selectedHobbies,
+            selectedColors,
+            selectedPets,
+            selectedStatus
+        };
         onFiltersChange(newFilters);
-    }, [selectedOccupations, ageFilter, nameFilter, emailFilter, sortConfig, caseSensitive, selectedHobbies, selectedColors, selectedPets, selectedStatus, onFiltersChange]);
+    }, [selectedOccupations, ageFilter, nameFilter, emailFilter, sortConfig, caseSensitive, 
+        selectedHobbies, selectedColors, selectedPets, selectedStatus, onFiltersChange]);
+
+    useEffect(() => {
+        handleFilterChange();
+    }, [handleFilterChange]);
 
     useEffect(() => {
         setTimeout(() => setLoading(false), 1000); // Simulate loading delay
@@ -72,9 +88,8 @@ const SpreadsheetTable = memo(({ data, onFiltersChange, onTotalCountChange, onUs
             const matchesEmail = email.toLowerCase().includes(emailFilter.toLowerCase());
             return matchesOccupation && matchesAge && matchesHobby && matchesColor && matchesPet && matchesName && matchesEmail && matchesStatus;
         });
-        onTotalCountChange(rows.length);
         return rows;
-    }, [data.rows, selectedOccupations, ageFilter, nameFilter, emailFilter, caseSensitive, selectedHobbies, selectedColors, selectedPets, selectedStatus, onTotalCountChange]);
+    }, [data.rows, selectedOccupations, ageFilter, nameFilter, emailFilter, caseSensitive, selectedHobbies, selectedColors, selectedPets, selectedStatus]);
 
     const sortedRows = React.useMemo(() => {
         if (sortConfig.key !== null && isValidData) {
