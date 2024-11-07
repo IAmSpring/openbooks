@@ -1,0 +1,12 @@
+{
+    "user1": [
+        {
+            "id": "default-file-1",
+            "name": "example.pdf",
+            "type": "application/pdf",
+            "size": 1024,
+            "timestamp": "2024-01-01T00:00:00.000Z",
+            "url": "/mock-files/example.pdf"
+        }
+    ]
+} 

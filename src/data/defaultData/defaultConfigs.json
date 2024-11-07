@@ -1,0 +1,16 @@
+{
+    "savedConfigs": [
+        {
+            "name": "Default Configuration",
+            "timestamp": "2024-01-01T00:00:00.000Z",
+            "filters": {
+                "selectedOccupations": [],
+                "ageFilter": [0, 100],
+                "nameFilter": "",
+                "emailFilter": "",
+                "sortConfig": { "key": null, "direction": "ascending" },
+                "caseSensitive": false
+            }
+        }
+    ]
+} 
